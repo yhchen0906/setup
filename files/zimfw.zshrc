@@ -40,7 +40,7 @@ EOF
 
 mkdir -p "$ZIM_MODULES"
 sed -ne 's#^zmodule ##p' "$ZIMRC" | sed -E 's#^([^/]+)$#zimfw/\1#' \
-  | xargs -P 0 -I {} \
+  | xargs -P 8 -I {} \
   git -C "$ZIM_MODULES" clone --depth 1 "https://github.com/{}.git"
 
 touch "$ZDOTDIR/.z"
@@ -49,7 +49,7 @@ cat > "$ZSHENV" << "EOF"
 : ${_Z_DATA=${ZDOTDIR:-${HOME}}/.z}
 EOF
 
-xargs -P 0 -I {} sh -c {} << EOF
+xargs -P 8 -I {} sh -c {} << EOF
 wget -qO "$ZDOTDIR/.p10k.zsh" https://setup.yeeha.xyz/files/p10k.zsh
 wget -qO "$ZIMFW" https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
 wget -qO "$ZSHRC" https://raw.githubusercontent.com/zimfw/install/master/src/templates/zshrc
