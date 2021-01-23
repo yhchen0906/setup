@@ -7,22 +7,18 @@ initialize
 
 apt_install vim
 
-cat > ~/.vimrc << "EOF"
-colo elflord
-syn on
-se mouse=""
-se ai si cin
-se nu ru is hls
-se nowrap t_Co=256
-se et ts=2 sw=2 sts=2
-se fencs=utf8,big5,gbk,latin1
-highlight LineNr ctermfg=gray
-map <F2> :w<CR>:!clear ; echo "\033[0;31m[Compiling]\033[0m" ; clang++ % --pedantic -Wall -O2 -std=c++14 -o %:r && echo "\033[0;31m[Compiled]\n[Running]\033[0m" && ./%:r && echo "\033[0;31m[Terminated]\033[0m"<CR>
-map <F4> :w<CR>:!clear ; ./%<CR>
+aria2_download << EOF
+https://setup.yeeha.xyz/files/vimrc
+  dir=$HOME
+  out=.vimrc
+https://setup.yeeha.xyz/files/vim.tar
+  dir=$TMP_DIR
+  out=vim.tar
 EOF
 
 post_install << "POST_INSTALL_EOF"
 sudo update-alternatives --set editor /usr/bin/vim.basic
+tar xf "$TMP_DIR/vim.tar" -C "$HOME"
 POST_INSTALL_EOF
 
 finalize
