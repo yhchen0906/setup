@@ -17,7 +17,6 @@ cat > ~/.config/albert/albert.conf << "EOF"
 [General]
 hotkey=Alt+Space
 showTray=false
-telemetry=true
 
 [org.albert.extension.applications]
 enabled=true
