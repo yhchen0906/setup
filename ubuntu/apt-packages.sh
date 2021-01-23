@@ -69,7 +69,8 @@ apt_install \
 if [ "$VERSION_ID" = "20.04" ]; then
   apt_install \
     appmenu-gtk2-module \
-    appmenu-gtk3-module
+    appmenu-gtk3-module \
+    okular
 fi
 
 finalize
