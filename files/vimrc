@@ -7,7 +7,7 @@ highlight LineNr ctermfg=gray
 
 set mouse=""
 set nowrap
-set autoindent
+set autoindent smartindent
 
 set ruler number
 set incsearch hlsearch
