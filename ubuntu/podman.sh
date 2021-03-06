@@ -30,7 +30,7 @@ sudo ln -sf \
 
 sudo mkdir -p /usr/share/containers/oci/hooks.d /etc/containers/oci/hooks.d
 
-sudo rm /etc/containers/containers.conf
+sudo rm -f /etc/containers/containers.conf
 sudo_tee /etc/containers/containers.conf << "EOF"
 [containers]
 tz = "local"
