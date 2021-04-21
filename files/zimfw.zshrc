@@ -21,11 +21,9 @@ mkdir -p "$ZDOTDIR"
 cat > "$ZIMRC" << EOF
 zmodule archive
 zmodule environment
-zmodule git
 zmodule input
 zmodule termtitle
 zmodule utility
-zmodule git-info
 zmodule steeef
 $([[ -x "$CONDA_BIN" ]] && echo "" && echo "zmodule esc/conda-zsh-completion")
 zmodule zsh-users/zsh-completions
