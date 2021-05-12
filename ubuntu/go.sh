@@ -6,7 +6,7 @@ fi
 initialize
 
 aria2_download << EOF
-https://golang.org/dl/go1.16.3.linux-amd64.tar.gz
+https://golang.org/dl/go1.16.4.linux-amd64.tar.gz
   dir=$TMP_DIR
   out=go.tar.gz
 EOF
