@@ -43,6 +43,9 @@ EOF
     [ ! -x "$(command -v jq)" ]; then
     sudo apt-fast install -y aria2 git jq
   fi
+
+  sudo apt-fast update -y
+  sudo apt-fast install -y ca-certificates
 }
 
 do_add_apt_key() {
