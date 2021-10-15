@@ -43,16 +43,22 @@ POST_INSTALL_EOF
 
 # User Themes
 install_gnome_extension 19
+
 # gTile
 install_gnome_extension 28
-# KStatusNotifierItem/AppIndicator Support
-install_gnome_extension 615
+
 # Clipboard Indicator
 install_gnome_extension 779
+
 # Gravatar
 #install_gnome_extension 1015
+
 # Dash to Panel
 install_gnome_extension 1160
+
+# Top Indicator App
+install_gnome_extension 3681
+
 post_install << "POST_INSTALL_EOF"
 dconf reset -f /org/gnome/shell/extensions/dash-to-panel/
 dconf load /org/gnome/shell/extensions/ << "EOF"
