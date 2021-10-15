@@ -34,10 +34,13 @@ sudo rm -f /etc/containers/containers.conf
 sudo_tee /etc/containers/containers.conf << "EOF"
 [containers]
 tz = "local"
-hooks_dir = ["/usr/share/containers/oci/hooks.d", "/etc/containers/oci/hooks.d"]
 
 [engine]
 runtime = "crun"
+hooks_dir = [
+  "/usr/share/containers/oci/hooks.d",
+  "/etc/containers/oci/hooks.d"
+]
 EOF
 POST_INSTALL_EOF
 
