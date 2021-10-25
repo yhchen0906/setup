@@ -5,18 +5,19 @@ fi
 
 initialize
 
-if [ "$VERSION_ID" = "18.04" ]; then
+LLVM_VERSION=13
+
 add_apt_key 'https://apt.llvm.org/llvm-snapshot.gpg.key'
 add_apt_list llvm \
-  "deb http://apt.llvm.org/$UBUNTU_CODENAME/ llvm-toolchain-$UBUNTU_CODENAME main"
-fi
+  "deb http://apt.llvm.org/$UBUNTU_CODENAME/ llvm-toolchain-$UBUNTU_CODENAME-$LLVM_VERSION main"
 
 apt_install \
-  lld \
-  lldb \
-  clang \
-  clangd \
-  clang-tidy \
-  clang-format
+  lld-$LLVM_VERSION \
+  lldb-$LLVM_VERSION \
+  clang-$LLVM_VERSION \
+  clangd-$LLVM_VERSION \
+  clang-tidy-$LLVM_VERSION \
+  clang-tools-$LLVM_VERSION \
+  clang-format-$LLVM_VERSION
 
 finalize
