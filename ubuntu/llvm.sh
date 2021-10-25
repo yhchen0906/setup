@@ -20,4 +20,20 @@ apt_install \
   clang-tools-$LLVM_VERSION \
   clang-format-$LLVM_VERSION
 
+post_install << POST_INSTALL_EOF
+LLVM_VERSION=$LLVM_VERSION
+POST_INSTALL_EOF
+
+post_install << "POST_INSTALL_EOF"
+cd /usr/bin || exit
+find . -mindepth 1 -maxdepth 1 \
+  -name "*clang*-$LLVM_VERSION*" \( -type f -o -type l \) \
+  -printf '%f\n' | awk -v version=$LLVM_VERSION '{
+    printf "ln -sf %s ", $0;
+    gsub("-"version, "");
+    print $0;
+  }' | sudo sh -x
+cd - > /dev/null || exit
+POST_INSTALL_EOF
+
 finalize
