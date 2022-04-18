@@ -48,7 +48,7 @@ _Z_DATA=${ZDOTDIR}/.z}
 EOF
 
 xargs -P 32 -I {} sh -c {} << EOF
-wget -qO "$ZDOTDIR/.p10k.zsh" https://setup.yeeha.xyz/files/p10k.zsh
+wget -qO "$ZDOTDIR/.p10k.zsh" https://setup.rogeric.xyz/files/p10k.zsh
 wget -qO "$ZIMFW" https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
 wget -qO "$ZSHRC" https://raw.githubusercontent.com/zimfw/install/master/src/templates/zshrc
 wget -qO "$ZLOGIN" https://raw.githubusercontent.com/zimfw/install/master/src/templates/zlogin
