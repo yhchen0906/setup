@@ -43,8 +43,8 @@ sed -ne 's#^zmodule ##p' "$ZIMRC" | sed -E 's#^([^/]+)$#zimfw/\1#' \
 
 touch "$ZDOTDIR/.z"
 cat > "$ZSHENV" << "EOF"
-: ${ZDOTDIR=${HOME}/.zdotdir}
-: ${_Z_DATA=${ZDOTDIR:-${HOME}}/.z}
+ZDOTDIR=${HOME}/.zdotdir
+_Z_DATA=${ZDOTDIR}/.z}
 EOF
 
 xargs -P 32 -I {} sh -c {} << EOF
