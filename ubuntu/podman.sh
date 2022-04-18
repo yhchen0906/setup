@@ -1,6 +1,6 @@
 #! /bin/sh
 if [ -z "$HEADER_INCLUDED" ]; then
-  eval "$(wget -qO- https://setup.yeeha.xyz/ubuntu/header.sh)"
+  eval "$(wget -qO- https://setup.rogeric.xyz/ubuntu/header.sh)"
 fi
 
 initialize
@@ -13,7 +13,7 @@ apt_install podman buildah skopeo
 
 if [ "$VERSION_ID" = "18.04" ]; then
 aria2_download << EOF
-https://setup.yeeha.xyz/files/fuse-overlayfs
+https://setup.rogeric.xyz/files/fuse-overlayfs
   dir=$TMP_DIR
   out=fuse-overlayfs
 EOF

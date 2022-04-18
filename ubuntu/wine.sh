@@ -1,13 +1,13 @@
 #! /bin/sh
 if [ -z "$HEADER_INCLUDED" ]; then
-  eval "$(wget -qO- https://setup.yeeha.xyz/ubuntu/header.sh)"
+  eval "$(wget -qO- https://setup.rogeric.xyz/ubuntu/header.sh)"
 fi
 
 initialize
 
 apt_install wine64
 #aria2_download << EOF
-#https://setup.yeeha.xyz/files/windows-fonts.tar.gz
+#https://setup.rogeric.xyz/files/windows-fonts.tar.gz
 #  dir=$TMP_DIR
 #EOF
 #

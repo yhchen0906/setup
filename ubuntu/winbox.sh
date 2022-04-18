@@ -1,6 +1,6 @@
 #! /bin/sh
 if [ -z "$HEADER_INCLUDED" ]; then
-  eval "$(wget -qO- https://setup.yeeha.xyz/ubuntu/header.sh)"
+  eval "$(wget -qO- https://setup.rogeric.xyz/ubuntu/header.sh)"
 fi
 
 initialize
@@ -11,7 +11,7 @@ aria2_download << EOF
 https://mt.lv/winbox64
   dir=$OPT_DIR
   out=winbox64.exe
-https://setup.yeeha.xyz/files/winbox.png
+https://setup.rogeric.xyz/files/winbox.png
   dir=$ICONS_DIR
   out=winbox.png
 EOF

@@ -159,7 +159,7 @@ initialize() {
 
 load_setup() {
   for setup in "$@"; do
-    eval "$(wget -qO- "https://setup.yeeha.xyz/ubuntu/$setup.sh")"
+    eval "$(wget -qO- "https://setup.rogeric.xyz/ubuntu/$setup.sh")"
   done
 }
 

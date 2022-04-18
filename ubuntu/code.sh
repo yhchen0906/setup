@@ -1,6 +1,6 @@
 #! /bin/sh
 if [ -z "$HEADER_INCLUDED" ]; then
-  eval "$(wget -qO- https://setup.yeeha.xyz/ubuntu/header.sh)"
+  eval "$(wget -qO- https://setup.rogeric.xyz/ubuntu/header.sh)"
 fi
 
 initialize
@@ -9,7 +9,7 @@ aria2_download << EOF
 https://update.code.visualstudio.com/latest/linux-deb-x64/stable
   dir=$TMP_DIR
   out=code.deb
-https://setup.yeeha.xyz/files/code-nautilus.py
+https://setup.rogeric.xyz/files/code-nautilus.py
   dir=$HOME/.local/share/nautilus-python/extensions
 EOF
 
