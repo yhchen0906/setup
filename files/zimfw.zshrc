@@ -11,6 +11,8 @@ ZIM_MODULES=$ZIM/modules
 rm -rf "$ZDOTDIR"
 mkdir -p "$ZDOTDIR"
 
+touch "$ZDOTDIR/.z"
+
 [[ -d "$HOME/anaconda3" ]] && : ${CONDA_DIR:="$HOME/anaconda3"}
 [[ -d "$HOME/miniconda3" ]] && : ${CONDA_DIR:="$HOME/miniconda3"}
 [[ -d "$HOME/.local/opt/miniconda3" ]] && : ${CONDA_DIR:="$HOME/.local/opt/miniconda3"}
@@ -40,11 +42,14 @@ sed -ne 's#^zmodule ##p' "$ZIMRC" | sed -E 's#^([^/]+)$#zimfw/\1#' \
   | xargs -P 32 -I {} \
   git -C "$ZIM_MODULES" clone --depth 1 "https://github.com/{}.git"
 
-touch "$ZDOTDIR/.z"
 cat > "$ZSHENV" << "EOF"
 ZDOTDIR=${HOME}/.zdotdir
 _Z_DATA=${ZDOTDIR}/.z
 EOF
+
+if [[ -f /etc/zsh/zshrc ]] && grep -q "skip_global_compinit" /etc/zsh/zshrc ; then
+  echo "skip_global_compinit=1" >> "$ZSHENV"
+fi
 
 xargs -P 32 -I {} sh -c {} << EOF
 wget -qO "$ZDOTDIR/.p10k.zsh" https://setup.rogeric.xyz/files/p10k.zsh
@@ -52,20 +57,12 @@ wget -qO "$ZIMFW" https://github.com/zimfw/zimfw/releases/latest/download/zimfw.
 wget -qO "$ZSHRC" https://raw.githubusercontent.com/zimfw/install/master/src/templates/zshrc
 EOF
 
-if [[ -f /etc/zsh/zshrc ]] && grep -q "skip_global_compinit" /etc/zsh/zshrc ; then
-  echo "skip_global_compinit=1" >> "$ZSHENV"
-fi
+echo >> "$ZSHRC"
 
 if [[ -x "$(command -v vim)" ]] ; then
   cat >> "$ZSHRC" << "EOF"
 EDITOR='vim'
 export EDITOR
-EOF
-fi
-
-if [[ -x "$(command -v tmux)" ]] && [[ ! -e ~/.tmux.conf ]]; then
-  cat >> ~/.tmux.conf << "EOF"
-set -g default-terminal "screen-256color"
 EOF
 fi
 
@@ -100,6 +97,12 @@ cat >> "$ZSHRC.p10k" << "EOF"
 EOF
 
 mv "$ZSHRC.p10k" "$ZSHRC"
+
+if [[ -x "$(command -v tmux)" ]] && [[ ! -e ~/.tmux.conf ]]; then
+  cat >> ~/.tmux.conf << "EOF"
+set -g default-terminal "screen-256color"
+EOF
+fi
 
 ln -sf .zdotdir/.zshenv ~/.zshenv
 exec sh -c "rm -rf ~/.zshrc ~/.zcompdump; zsh \"$ZIMFW\" install; exec zsh"
