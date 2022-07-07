@@ -1,6 +1,5 @@
 #! /bin/zsh
 ZDOTDIR=$HOME/.zdotdir
-ZLOGIN=$ZDOTDIR/.zlogin
 ZSHENV=$ZDOTDIR/.zshenv
 ZSHRC=$ZDOTDIR/.zshrc
 
@@ -44,15 +43,13 @@ sed -ne 's#^zmodule ##p' "$ZIMRC" | sed -E 's#^([^/]+)$#zimfw/\1#' \
 touch "$ZDOTDIR/.z"
 cat > "$ZSHENV" << "EOF"
 ZDOTDIR=${HOME}/.zdotdir
-_Z_DATA=${ZDOTDIR}/.z}
+_Z_DATA=${ZDOTDIR}/.z
 EOF
 
 xargs -P 32 -I {} sh -c {} << EOF
 wget -qO "$ZDOTDIR/.p10k.zsh" https://setup.rogeric.xyz/files/p10k.zsh
 wget -qO "$ZIMFW" https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
 wget -qO "$ZSHRC" https://raw.githubusercontent.com/zimfw/install/master/src/templates/zshrc
-wget -qO "$ZLOGIN" https://raw.githubusercontent.com/zimfw/install/master/src/templates/zlogin
-wget -qO- https://raw.githubusercontent.com/zimfw/install/master/src/templates/zshenv >> "$ZSHENV"
 EOF
 
 if [[ -f /etc/zsh/zshrc ]] && grep -q "skip_global_compinit" /etc/zsh/zshrc ; then
