@@ -82,18 +82,23 @@ if [[ -x "$CONDA_BIN" ]] ; then
 fi
 
 cat > "$ZSHRC.p10k" << "EOF"
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.  # Initialization code that may require console input (password prompts, [y/n]
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zdotdir/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
 EOF
+
 cat "$ZSHRC" >> "$ZSHRC.p10k"
+
 cat >> "$ZSHRC.p10k" << "EOF"
+
 # To customize prompt, run `p10k configure` or edit ~/.zdotdir/.p10k.zsh.
 [[ ! -f ~/.zdotdir/.p10k.zsh ]] || source ~/.zdotdir/.p10k.zsh
 EOF
+
 mv "$ZSHRC.p10k" "$ZSHRC"
 
 ln -sf .zdotdir/.zshenv ~/.zshenv
