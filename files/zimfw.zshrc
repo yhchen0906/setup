@@ -1,84 +1,107 @@
 #! /bin/zsh
-ZDOTDIR=$HOME/.zdotdir
-ZSHENV=$ZDOTDIR/.zshenv
-ZSHRC=$ZDOTDIR/.zshrc
+readonly -i NPROC=32
 
-ZIMRC=$ZDOTDIR/.zimrc
-ZIM=$ZDOTDIR/.zim
-ZIMFW=$ZIM/zimfw.zsh
-ZIM_MODULES=$ZIM/modules
+readonly ZDOTDIR=${HOME}/.zdotdir
+readonly ZSHENV=${ZDOTDIR}/.zshenv ZSHRC=${ZDOTDIR}/.zshrc P10K=${ZDOTDIR}/.p10k.zsh
 
-rm -rf "$ZDOTDIR"
-mkdir -p "$ZDOTDIR"
+readonly ZIM_HOME=${ZDOTDIR}/.zim
+readonly ZIMRC=${ZDOTDIR}/.zimrc ZIMFW=${ZIM_HOME}/zimfw.zsh ZIM_MODULES=${ZIM_HOME}/modules
 
-touch "$ZDOTDIR/.z"
+get_conda_prefix() {
+  readonly -a conda_prefixes=(
+    "${HOME}/anaconda3"
+    "${HOME}/miniconda3"
+    "${HOME}/.local/opt/miniconda3"
+  )
 
-[[ -d "$HOME/anaconda3" ]] && : ${CONDA_DIR:="$HOME/anaconda3"}
-[[ -d "$HOME/miniconda3" ]] && : ${CONDA_DIR:="$HOME/miniconda3"}
-[[ -d "$HOME/.local/opt/miniconda3" ]] && : ${CONDA_DIR:="$HOME/.local/opt/miniconda3"}
+  for conda_prefix in ${conda_prefixes}; do
+    if [[ -d "${conda_prefix}" ]]; then
+      echo "${conda_prefix}"
+      return 0
+    fi
+  done
 
-[[ -x "$CONDA_DIR/bin/conda" ]] && : ${CONDA_BIN:="$CONDA_DIR/bin/conda"}
+  return 1
+}
 
-cat > "$ZIMRC" << EOF
-zmodule archive
-zmodule environment
-zmodule input
-zmodule termtitle
-zmodule utility
-zmodule steeef
-$([[ -x "$CONDA_BIN" ]] && echo "" && echo "zmodule esc/conda-zsh-completion")
-zmodule zsh-users/zsh-completions
+initialize_assets() {
+  rm -rf "${ZDOTDIR}"
 
-zmodule completion
-zmodule zsh-users/zsh-autosuggestions
-zmodule zsh-users/zsh-syntax-highlighting
-zmodule zsh-users/zsh-history-substring-search
-zmodule rupa/z
-zmodule romkatv/powerlevel10k
+  mkdir -p "${ZIM_MODULES}"
+  touch "${ZDOTDIR}/.z"
+
+  xargs -P "${NPROC}" -I {} sh -c {} << EOF
+wget -qO "${P10K}" https://setup.rogeric.xyz/files/p10k.zsh
+wget -qO "${ZIMFW}" https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
+wget -qO "${ZSHRC}" https://raw.githubusercontent.com/zimfw/install/master/src/templates/zshrc
 EOF
 
-mkdir -p "$ZIM_MODULES"
-sed -ne 's#^zmodule ##p' "$ZIMRC" | sed -E 's#^([^/]+)$#zimfw/\1#' \
-  | xargs -P 32 -I {} \
-  git -C "$ZIM_MODULES" clone --depth 1 "https://github.com/{}.git"
+  if (( ${+commands[tmux]} )) && [[ ! -e ~/.tmux.conf ]]; then
+    echo 'set -g default-terminal "screen-256color"' >| ~/.tmux.conf
+  fi
+}
 
-cat > "$ZSHENV" << "EOF"
+generate_zshenv() {
+  cat >| "$ZSHENV" << "EOF"
 ZDOTDIR=${HOME}/.zdotdir
 _Z_DATA=${ZDOTDIR}/.z
 EOF
+  grep -q "skip_global_compinit" /etc/zsh/zshrc > /dev/null 2>&1 && echo "skip_global_compinit=1" >> "$ZSHENV"
+}
 
-if [[ -f /etc/zsh/zshrc ]] && grep -q "skip_global_compinit" /etc/zsh/zshrc ; then
-  echo "skip_global_compinit=1" >> "$ZSHENV"
-fi
+generate_zimrc() {
+  local -a zmodules
 
-xargs -P 32 -I {} sh -c {} << EOF
-wget -qO "$ZDOTDIR/.p10k.zsh" https://setup.rogeric.xyz/files/p10k.zsh
-wget -qO "$ZIMFW" https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
-wget -qO "$ZSHRC" https://raw.githubusercontent.com/zimfw/install/master/src/templates/zshrc
-EOF
+  zmodules+=('archive' 'environment')
+  (( ${+commands[fzf]} )) && zmodules+=('fzf')
+  zmodules+=('input' 'termtitle' 'utility')
+  [[ -x "${CONDA_EXE}" ]] && zmodules+=('esc/conda-zsh-completion')
+  zmodules+=('zsh-users/zsh-completions --fpath src' 'completion')
+  zmodules+=(
+    'zsh-users/zsh-syntax-highlighting'
+    'zsh-users/zsh-history-substring-search'
+    'zsh-users/zsh-autosuggestions'
+  )
+  zmodules+=(
+    'rupa/z'
+    'romkatv/powerlevel10k'
+  )
 
-echo >> "$ZSHRC"
+  printf 'zmodule %s\n' ${zmodules} >| "${ZIMRC}"
+}
 
-if [[ -x "$(command -v vim)" ]] ; then
+download_zmodules() {
+  while read -r line; do
+    if [[ ${line} =~ '^zmodule (\S+)' ]]; then
+      local repo=${match[1]}
+      [[ ${repo} =~ '^[^\/]+$' ]] && repo="zimfw/${repo}"
+      echo "https://github.com/${repo}.git"
+    fi
+  done < "${ZIMRC}" | \
+  xargs -P "${NPROC}" -I {} git -C "${ZIM_MODULES}" clone --depth 1 {}
+}
+
+patch_zshrc_misc() {
+  echo >> "$ZSHRC"
+
+  if (( ${+commands[vim]} )) ; then
   cat >> "$ZSHRC" << "EOF"
 EDITOR='vim'
 export EDITOR
 EOF
-fi
+  fi
 
-if [[ -x "$(command -v dircolors)" ]] ; then
-  dircolors >> "$ZSHRC"
-fi
+  (( ${+commands[dircolors]} )) && dircolors >> "$ZSHRC"
 
-if [[ -d "/opt/ros" ]]; then
-  echo "source $(find /opt/ros -mindepth 2 -maxdepth 2 -name setup.zsh)" >> "$ZSHRC"
-fi
+  if [[ -d "/opt/ros" ]]; then
+    echo "source $(find /opt/ros -mindepth 2 -maxdepth 2 -name setup.zsh)" >> "$ZSHRC"
+  fi
 
-if [[ -x "$CONDA_BIN" ]] ; then
-  env "HOME=$ZDOTDIR" "$CONDA_BIN" init zsh
-fi
+  [[ -x "${CONDA_EXE}" ]] && env "HOME=${ZDOTDIR}" "${CONDA_EXE}" init zsh
+}
 
-cat > "$ZSHRC.p10k" << "EOF"
+patch_zshrc_p10k() {
+  cat >| "$ZSHRC.p10k" << "EOF"
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zdotdir/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -88,21 +111,26 @@ fi
 
 EOF
 
-cat "$ZSHRC" >> "$ZSHRC.p10k"
+  cat "$ZSHRC" >> "$ZSHRC.p10k"
 
-cat >> "$ZSHRC.p10k" << "EOF"
+  cat >> "$ZSHRC.p10k" << "EOF"
 
 # To customize prompt, run `p10k configure` or edit ~/.zdotdir/.p10k.zsh.
 [[ ! -f ~/.zdotdir/.p10k.zsh ]] || source ~/.zdotdir/.p10k.zsh
 EOF
 
-mv "$ZSHRC.p10k" "$ZSHRC"
+  mv "$ZSHRC.p10k" "$ZSHRC"
+}
 
-if [[ -x "$(command -v tmux)" ]] && [[ ! -e ~/.tmux.conf ]]; then
-  cat >> ~/.tmux.conf << "EOF"
-set -g default-terminal "screen-256color"
-EOF
-fi
+readonly CONDA_PREFIX=$(get_conda_prefix)
+readonly CONDA_EXE=${CONDA_PREFIX}/bin/conda
+
+initialize_assets
+generate_zshenv
+generate_zimrc
+download_zmodules
+patch_zshrc_misc
+patch_zshrc_p10k
 
 ln -sf .zdotdir/.zshenv ~/.zshenv
 exec sh -c "rm -rf ~/.zshrc ~/.zcompdump; zsh \"$ZIMFW\" install; exec zsh"
