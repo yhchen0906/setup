@@ -56,7 +56,7 @@ generate_zimrc() {
   (( ${+commands[fzf]} )) && zmodules+=('fzf')
   zmodules+=('input' 'termtitle' 'utility')
   [[ -x "${CONDA_EXE}" ]] && zmodules+=('esc/conda-zsh-completion')
-  zmodules+=('zsh-users/zsh-completions --fpath src' 'completion')
+  zmodules+=('zsh-users/zsh-completions' 'completion')
   zmodules+=(
     'zsh-users/zsh-syntax-highlighting'
     'zsh-users/zsh-history-substring-search'
