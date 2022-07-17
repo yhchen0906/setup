@@ -32,6 +32,8 @@ do_initialize() {
     sudo apt install -y aria2 curl git jq
   fi
 
+  BEST_MIRROR=$(curl -s http://mirrors.ubuntu.com/mirrors.txt | xargs -n1 -I{} curl -s -r 0-409600 -w "%{speed_download} {}\n" -o /dev/null {}/ls-lR.gz | sort -gr | head -1 | cut -d' ' -f2)
+
   if [ ! -x "$(command -v apt-fast)" ]; then
     sudo add-apt-repository -y -n ppa:apt-fast/stable
     sudo apt-get update -y
@@ -41,7 +43,6 @@ apt-fast	apt-fast/dlflag	boolean	true
 apt-fast	apt-fast/aptmanager	select	apt-get
 EOF
 
-    BEST_MIRROR=$(curl -s http://mirrors.ubuntu.com/mirrors.txt | xargs -n1 -I{} curl -s -r 0-409600 -w "%{speed_download} {}\n" -o /dev/null {}/ls-lR.gz | sort -gr | head -1 | cut -d' ' -f2)
     sudo apt-get -f -o 'Dpkg::Options::=--force-confnew' install -y apt-fast
     sudo tee -a /etc/apt-fast.conf << EOF
 MIRRORS=('$BEST_MIRROR')
