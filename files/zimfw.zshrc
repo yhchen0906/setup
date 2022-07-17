@@ -30,10 +30,10 @@ initialize_assets() {
   mkdir -p "${ZIM_MODULES}"
   touch "${ZDOTDIR}/.z"
 
-  xargs -P "${NPROC}" -I {} sh -c {} << EOF
-wget -qO "${P10K}" https://setup.rogeric.xyz/files/p10k.zsh
-wget -qO "${ZIMFW}" https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
-wget -qO "${ZSHRC}" https://raw.githubusercontent.com/zimfw/install/master/src/templates/zshrc
+  xargs -P "${NPROC}" -L 1 wget -qO << EOF
+"${P10K}" https://setup.rogeric.xyz/files/p10k.zsh
+"${ZIMFW}" https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
+"${ZSHRC}" https://raw.githubusercontent.com/zimfw/install/master/src/templates/zshrc
 EOF
 
   if (( ${+commands[tmux]} )) && [[ ! -e ~/.tmux.conf ]]; then
