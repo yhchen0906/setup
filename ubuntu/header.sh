@@ -163,8 +163,7 @@ initialize() {
 }
 
 load_setup() {
-  printf "\"$TMP_DIR/%s.sh\" https://setup.rogeric.xyz/ubuntu/%s.sh\n" "$@"
-  printf "\"$TMP_DIR/%s.sh\" https://setup.rogeric.xyz/ubuntu/%s.sh\n" "$@" | xargs -t -L 1 -P 0 wget -qO
+  printf "%s\n" "$@" | xargs -t -P0 -n1 -I{} wget -qO $TMP_DIR/{}.sh https://setup.rogeric.xyz/ubuntu/{}.sh
 
   for setup in "$@"; do
     . "$TMP_DIR/$setup.sh"
