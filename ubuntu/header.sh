@@ -23,6 +23,15 @@ do_initialize() {
   AUTOSTART_DIR=$HOME/.config/autostart
   mkdir -p "$OPT_DIR" "$BIN_DIR" "$ICONS_DIR" "$APPS_DIR" "$AUTOSTART_DIR"
 
+  if \
+    [ ! -x "$(command -v aria2c)" ] || \
+    [ ! -x "$(command -v curl)" ] || \
+    [ ! -x "$(command -v git)" ] || \
+    [ ! -x "$(command -v jq)" ]; then
+    sudo apt update -y
+    sudo apt install -y aria2 curl git jq
+  fi
+
   if [ ! -x "$(command -v apt-fast)" ]; then
     sudo add-apt-repository -y -n ppa:apt-fast/stable
     sudo apt-get update -y
@@ -31,17 +40,12 @@ apt-fast	apt-fast/maxdownloads	string	8
 apt-fast	apt-fast/dlflag	boolean	true
 apt-fast	apt-fast/aptmanager	select	apt-get
 EOF
+
+    BEST_MIRROR=$(curl -s http://mirrors.ubuntu.com/mirrors.txt | xargs -n1 -I{} curl -s -r 0-409600 -w "%{speed_download} {}\n" -o /dev/null {}/ls-lR.gz | sort -gr | head -1 | cut -d' ' -f2)
     sudo apt-get -f -o 'Dpkg::Options::=--force-confnew' install -y apt-fast
     sudo tee -a /etc/apt-fast.conf << EOF
-MIRRORS=($(wget -qO- http://mirrors.ubuntu.com/mirrors.txt | grep -vF 'http://debian.linux.org.tw/ubuntu/' | sed -E "s/(^|$)/'/g" | tr '\n' ','))
+MIRRORS=('$BEST_MIRROR')
 EOF
-  fi
-
-  if \
-    [ ! -x "$(command -v aria2c)" ] || \
-    [ ! -x "$(command -v git)" ] || \
-    [ ! -x "$(command -v jq)" ]; then
-    sudo apt-fast install -y aria2 git jq
   fi
 
   sudo apt-fast update -y
@@ -158,8 +162,10 @@ initialize() {
 }
 
 load_setup() {
+  printf "wget -qO $TMP_DIR/%s.sh https://setup.rogeric.xyz/ubuntu/%s.sh\n" | xargs -t -n 1 -P 0 sh -c
+
   for setup in "$@"; do
-    eval "$(wget -qO- "https://setup.rogeric.xyz/ubuntu/$setup.sh")"
+    . "$TMP_DIR/$setup.sh"
   done
 }
 

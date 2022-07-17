@@ -12,7 +12,7 @@ fi
 load_setup \
   sudo-nopasswd \
   net-perf \
-  apt-mirror \
+  apt-best \
   gsettings
 
 load_setup \
