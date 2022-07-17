@@ -33,7 +33,7 @@ apt-fast	apt-fast/aptmanager	select	apt-get
 EOF
     sudo apt-get -f -o 'Dpkg::Options::=--force-confnew' install -y apt-fast
     sudo tee -a /etc/apt-fast.conf << EOF
-MIRRORS=($(wget -qO- http://mirrors.ubuntu.com/mirrors.txt | sed -E "s/(^|$)/'/g" | tr '\n' ','))
+MIRRORS=($(wget -qO- http://mirrors.ubuntu.com/mirrors.txt | grep -vF 'http://debian.linux.org.tw/ubuntu/' | sed -E "s/(^|$)/'/g" | tr '\n' ','))
 EOF
   fi
 
