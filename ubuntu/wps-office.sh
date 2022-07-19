@@ -5,7 +5,7 @@ fi
 
 initialize
 
-DOWNLOAD_URL=$(wget -qO- https://linux.wps.com/js/meta.js | sed -nE 's/\s*var download_link_deb = "(.*)";/\1/p')
+DOWNLOAD_URL='https://wdl1.pcfg.cache.wpscdn.com/wpsdl/wpsoffice/download/linux/11664/wps-office_11.1.0.11664.XA_amd64.deb'
 
 aria2_download << EOF
 $DOWNLOAD_URL
