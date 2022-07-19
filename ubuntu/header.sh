@@ -27,9 +27,10 @@ do_initialize() {
     [ ! -x "$(command -v aria2c)" ] || \
     [ ! -x "$(command -v curl)" ] || \
     [ ! -x "$(command -v git)" ] || \
-    [ ! -x "$(command -v jq)" ]; then
+    [ ! -x "$(command -v jq)" ] || \
+    [ ! -x "$(command -v unzip)" ]; then
     sudo apt update -y
-    sudo apt install -y aria2 curl git jq
+    sudo apt install -y aria2 curl git jq unzip
   fi
 
   BEST_MIRROR=$(curl -s http://mirrors.ubuntu.com/mirrors.txt | xargs -n1 -I{} curl -s -r 0-409600 -w "%{speed_download} {}\n" -o /dev/null {}/ls-lR.gz | sort -gr | head -1 | cut -d' ' -f2)
