@@ -110,8 +110,8 @@ EOF
 do_aria2_download() {
   if [ -s "$ARIA2_DOWNLOAD_LIST" ]; then
     aria2c \
+      --max-tries=10 \
       --retry-wait=10 \
-      --max-retries=10 \
       --max-concurrent-downloads=10 \
       --max-connection-per-server=8 \
       --allow-overwrite=true \
