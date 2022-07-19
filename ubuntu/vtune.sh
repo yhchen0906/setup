@@ -5,17 +5,9 @@ fi
 
 initialize
 
-DOWNLOAD_URL='https://registrationcenter-download.intel.com/akdlm/irc_nas/tec/17095/vtune_profiler_2020.tar.gz'
+add_apt_key 'https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB'
+add_apt_list oneAPI 'deb https://apt.repos.intel.com/oneapi all main'
 
-aria2_download << EOF
-https://registrationcenter-download.intel.com/akdlm/irc_nas/tec/17095/vtune_profiler_2020.tar.gz
-  dir=$TMP_DIR
-  out=vtune.tar.gz
-EOF
-
-post_install << "POST_INSTALL_EOF"
-EXTRACT_DIR=$(mktemp -d -p "$TMP_DIR")
-tar zxf "$TMP_DIR/vtune.tar.gz" -C "$EXTRACT_DIR"
-POST_INSTALL_EOF
+apt_install intel-oneapi-vtune
 
 finalize
