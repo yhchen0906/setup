@@ -18,10 +18,11 @@ do_initialize() {
 
   OPT_DIR=$HOME/.local/opt
   BIN_DIR=$HOME/.local/bin
+  FONTS_DIR=$HOME/.local/share/fonts
   ICONS_DIR=$HOME/.local/share/icons
   APPS_DIR=$HOME/.local/share/applications
   AUTOSTART_DIR=$HOME/.config/autostart
-  mkdir -p "$OPT_DIR" "$BIN_DIR" "$ICONS_DIR" "$APPS_DIR" "$AUTOSTART_DIR"
+  mkdir -p "$OPT_DIR" "$BIN_DIR" "$FONTS_DIR" "$ICONS_DIR" "$APPS_DIR" "$AUTOSTART_DIR"
 
   if \
     [ ! -x "$(command -v aria2c)" ] || \

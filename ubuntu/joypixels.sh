@@ -5,10 +5,10 @@ fi
 
 initialize
 
-version='6.0.0'
+version='6.6.0'
 aria2_download << EOF
 https://cdn.joypixels.com/arch-linux/font/${version}/joypixels-android.ttf
-  dir=$HOME/.local/share/fonts
+  dir=$FONTS_DIR
 EOF
 
 if [ "$VERSION_ID" = "18.04" ]; then

@@ -7,13 +7,13 @@ initialize
 
 aria2_download << EOF
 https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf
-  dir=$HOME/.local/share/fonts
+  dir=$FONTS_DIR
 https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf
-  dir=$HOME/.local/share/fonts
+  dir=$FONTS_DIR
 https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf
-  dir=$HOME/.local/share/fonts
+  dir=$FONTS_DIR
 https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf
-  dir=$HOME/.local/share/fonts
+  dir=$FONTS_DIR
 EOF
 
 post_install << "POST_INSTALL_EOF"
