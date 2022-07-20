@@ -34,9 +34,8 @@ do_initialize() {
     sudo apt install -y aria2 curl git jq unzip
   fi
 
-  BEST_MIRROR=$(curl -s http://mirrors.ubuntu.com/mirrors.txt | xargs -n1 -I{} curl -s -r 0-409600 -w "%{speed_download} {}\n" -o /dev/null {}/ls-lR.gz | sort -gr | head -1 | cut -d' ' -f2)
-
   if [ ! -x "$(command -v apt-fast)" ]; then
+    : ${BEST_MIRROR:=$(curl -s http://mirrors.ubuntu.com/mirrors.txt | xargs -n1 -I{} curl -s -r 0-409600 -w "%{speed_download} {}\n" -o /dev/null {}/ls-lR.gz | sort -gr | head -1 | cut -d' ' -f2)}
     sudo add-apt-repository -y -n ppa:apt-fast/stable
     sudo apt-get update -y
     sudo debconf-set-selections << "EOF"
