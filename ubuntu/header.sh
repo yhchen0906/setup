@@ -30,8 +30,8 @@ do_initialize() {
     [ ! -x "$(command -v git)" ] || \
     [ ! -x "$(command -v jq)" ] || \
     [ ! -x "$(command -v unzip)" ]; then
-    sudo apt update -y
-    sudo apt install -y aria2 curl git jq unzip
+    sudo apt-get update -y
+    sudo apt-get install -y aria2 curl git jq unzip
   fi
 
   if [ ! -x "$(command -v apt-fast)" ]; then
