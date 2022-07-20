@@ -24,9 +24,11 @@ apt_install \
   default-jre \
   dos2unix \
   exfat-utils \
+  fd-find \
   figlet \
   fonts-powerline \
   fonts-wqy-microhei \
+  fzf \
   gimp \
   git \
   gnome-calculator \
