@@ -92,6 +92,18 @@ EOF
 
   (( ${+commands[dircolors]} )) && echo >> "$ZSHRC" && dircolors >> "$ZSHRC"
 
+  # systemctl completion hotfix
+  # https://github.com/ohmyzsh/ohmyzsh/issues/8751
+  if (( ${+commands[systemctl]} )); then
+    cat >> "$ZSHRC" << "EOF"
+
+_systemctl_unit_state () {
+  typeset -gA _sys_unit_state
+  _sys_unit_state=($(__systemctl list-unit-files "$PREFIX*" | awk '{print $1, $2}'))
+}
+EOF
+  fi
+
   if [[ -d "/opt/ros" ]]; then
     echo "source $(find /opt/ros -mindepth 2 -maxdepth 2 -name setup.zsh)" >> "$ZSHRC"
   fi
