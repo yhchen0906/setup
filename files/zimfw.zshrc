@@ -82,16 +82,15 @@ download_zmodules() {
 }
 
 patch_zshrc_misc() {
-  echo >> "$ZSHRC"
-
   if (( ${+commands[vim]} )) ; then
   cat >> "$ZSHRC" << "EOF"
+
 EDITOR='vim'
 export EDITOR
 EOF
   fi
 
-  (( ${+commands[dircolors]} )) && dircolors >> "$ZSHRC"
+  (( ${+commands[dircolors]} )) && echo >> "$ZSHRC" && dircolors >> "$ZSHRC"
 
   if [[ -d "/opt/ros" ]]; then
     echo "source $(find /opt/ros -mindepth 2 -maxdepth 2 -name setup.zsh)" >> "$ZSHRC"
