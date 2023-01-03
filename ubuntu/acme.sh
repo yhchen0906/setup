@@ -20,4 +20,4 @@ WantedBy=timers.target
 EOF
 
 systemctl daemon-reload
-systemctl enable acme-renew.timer
+systemctl enable --now acme-renew.timer
