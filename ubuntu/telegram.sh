@@ -18,15 +18,19 @@ EOF
 post_install << "POST_INSTALL_EOF"
 rm -rf "$OPT_DIR/Telegram"
 tar Jxf "$TMP_DIR/tsetup.tar.xz" -C "$OPT_DIR"
-ln -sf "$OPT_DIR/Telegram/Telegram" "$BIN_DIR"
 
-cat > "$APPS_DIR/telegramdesktop.desktop" << "EOF"
+TELEGRAM_BIN="$OPT_DIR/Telegram/Telegram"
+ln -sf "$TELEGRAM_BIN" "$BIN_DIR"
+
+TELEGRAM_PATH_MD5=$(echo -n "$TELEGRAM_BIN" | md5sum | cut -d ' ' -f 1)
+TELEGRAM_DESKTOP_NAME="org.telegram.desktop._${TELEGRAM_PATH_MD5}.desktop"
+
+cat > "$APPS_DIR/$TELEGRAM_DESKTOP_NAME" << "EOF"
 [Desktop Entry]
-Version=1.0
 Name=Telegram Desktop
 Comment=Official desktop version of Telegram messaging app
 TryExec=Telegram
-Exec=env TDESKTOP_DISABLE_TRAY_COUNTER=1 Telegram -- %u
+Exec=Telegram -- %u
 Icon=telegram
 Terminal=false
 StartupWMClass=TelegramDesktop
@@ -34,16 +38,23 @@ Type=Application
 Categories=Chat;Network;InstantMessaging;Qt;
 MimeType=x-scheme-handler/tg;
 Keywords=tg;chat;im;messaging;messenger;sms;tdesktop;
+Actions=quit;
+SingleMainWindow=true
 X-GNOME-UsesNotifications=true
+X-GNOME-SingleWindow=true
+
+[Desktop Action quit]
+Exec=Telegram -quit
+Name=Quit Telegram
+Icon=application-exit
 EOF
 
-cat > "$AUTOSTART_DIR/telegramdesktop.desktop" << "EOF"
+cat > "$AUTOSTART_DIR/$TELEGRAM_DESKTOP_NAME" << "EOF"
 [Desktop Entry]
-Version=1.0
 Name=Telegram Desktop
 Comment=Official desktop version of Telegram messaging app
 TryExec=Telegram
-Exec=env TDESKTOP_DISABLE_TRAY_COUNTER=1 Telegram -startintray
+Exec=Telegram -autostart
 Icon=telegram
 Terminal=false
 StartupWMClass=TelegramDesktop
@@ -51,7 +62,10 @@ Type=Application
 Categories=Chat;Network;InstantMessaging;Qt;
 MimeType=x-scheme-handler/tg;
 Keywords=tg;chat;im;messaging;messenger;sms;tdesktop;
+Actions=quit;
+SingleMainWindow=true
 X-GNOME-UsesNotifications=true
+X-GNOME-SingleWindow=true
 EOF
 POST_INSTALL_EOF
 
