@@ -11,6 +11,7 @@ Host *
   ControlMaster auto
   ControlPersist yes
   ControlPath ~/.ssh/sockets/%r@%h:%p
-  #ForwardAgent yes
-  #ForwardX11 yes
+  ForwardAgent yes
+  ForwardX11 yes
+  ForwardX11Trusted yes
 EOF

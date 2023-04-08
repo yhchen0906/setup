@@ -18,11 +18,7 @@ PREFIX=$OPT_DIR/miniconda3
 "$TMP_DIR/miniconda.sh" -u -b -p "$PREFIX"
 
 CONDA=$PREFIX/bin/conda
-"$CONDA" config --set always_yes True
-"$CONDA" config --add create_default_packages 'autopep8'
-"$CONDA" config --add create_default_packages 'pylint'
-"$CONDA" config --add create_default_packages 'python'
-"$CONDA" update --all
+"$CONDA" update -y conda
 POST_INSTALL_EOF
 
 finalize

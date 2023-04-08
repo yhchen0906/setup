@@ -36,7 +36,6 @@ sudo_tee /etc/containers/containers.conf << "EOF"
 tz = "local"
 
 [engine]
-runtime = "crun"
 hooks_dir = [
   "/usr/share/containers/oci/hooks.d",
   "/etc/containers/oci/hooks.d"

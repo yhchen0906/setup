@@ -5,7 +5,7 @@ fi
 
 initialize
 
-DOWNLOAD_URL='https://wdl1.pcfg.cache.wpscdn.com/wpsdl/wpsoffice/download/linux/11664/wps-office_11.1.0.11664.XA_amd64.deb'
+DOWNLOAD_URL='https://wdl1.pcfg.cache.wpscdn.com/wpsdl/wpsoffice/download/linux/11691/wps-office_11.1.0.11691.XA_amd64.deb'
 
 aria2_download << EOF
 $DOWNLOAD_URL
