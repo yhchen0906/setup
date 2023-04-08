@@ -22,6 +22,7 @@ apt_install \
   dconf-editor \
   debconf-utils \
   default-jre \
+  direnv \
   dos2unix \
   exfat-utils \
   fd-find \

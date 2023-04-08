@@ -54,9 +54,9 @@ EOF
 generate_zimrc() {
   local -a zmodules
 
-  zmodules+=('archive' 'environment')
+  zmodules+=('environment' 'archive')
   (( ${+commands[fzf]} )) && zmodules+=('fzf')
-  zmodules+=('input' 'termtitle' 'utility')
+  zmodules+=('git' 'input' 'termtitle' 'utility' 'ssh')
   [[ -x "${CONDA_EXE}" ]] && zmodules+=('esc/conda-zsh-completion')
   zmodules+=('zsh-users/zsh-completions' 'completion')
   zmodules+=(
@@ -84,6 +84,13 @@ download_zmodules() {
 }
 
 patch_zshrc_misc() {
+  if (( ${+commands[direnv]} )) ; then
+  cat >> "$ZSHRC" << "EOF"
+
+eval "$(direnv hook zsh)"
+EOF
+  fi
+
   if (( ${+commands[vim]} )) ; then
   cat >> "$ZSHRC" << "EOF"
 
