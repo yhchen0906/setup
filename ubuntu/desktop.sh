@@ -38,7 +38,7 @@ load_setup \
   locale \
   mailspring \
   meslolgs-nf \
-  miniconda \
+  mambaforge \
   no-apport \
   no-auto-upgrade \
   papirus-icon-theme \

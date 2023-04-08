@@ -12,6 +12,8 @@ get_conda_prefix() {
     "${HOME}/anaconda3"
     "${HOME}/miniconda3"
     "${HOME}/.local/opt/miniconda3"
+    "${HOME}/mambaforge"
+    "${HOME}/.local/opt/mambaforge"
   )
 
   for conda_prefix in ${conda_prefixes}; do
@@ -108,7 +110,8 @@ EOF
     echo "source $(find /opt/ros -mindepth 2 -maxdepth 2 -name setup.zsh)" >> "$ZSHRC"
   fi
 
-  [[ -x "${CONDA_EXE}" ]] && env "HOME=${ZDOTDIR}" "${CONDA_EXE}" init zsh
+  [[ -x "${MAMBA_EXE}" ]] && env "HOME=${ZDOTDIR}" "${MAMBA_EXE}" init zsh && return 0
+  [[ -x "${CONDA_EXE}" ]] && env "HOME=${ZDOTDIR}" "${CONDA_EXE}" init zsh && return 0
 }
 
 patch_zshrc_p10k() {
@@ -135,6 +138,7 @@ EOF
 
 readonly CONDA_PREFIX=$(get_conda_prefix)
 readonly CONDA_EXE=${CONDA_PREFIX}/bin/conda
+readonly MAMBA_EXE=${CONDA_PREFIX}/bin/mamba
 
 initialize_assets
 generate_zshenv
