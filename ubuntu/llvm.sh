@@ -5,7 +5,7 @@ fi
 
 initialize
 
-LLVM_VERSION=13
+LLVM_VERSION=15
 
 add_apt_key 'https://apt.llvm.org/llvm-snapshot.gpg.key'
 add_apt_list llvm \
