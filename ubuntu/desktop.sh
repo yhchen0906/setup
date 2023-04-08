@@ -44,6 +44,7 @@ load_setup \
   papirus-icon-theme \
   peek \
   perf \
+  platform-tools \
   podman \
   pycharm \
   qbittorrent \
