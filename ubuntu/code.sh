@@ -22,20 +22,10 @@ fi
 apt_install "$TMP_DIR/code.deb"
 
 post_install << "POST_INSTALL_EOF"
-code --install-extension shan.code-settings-sync
-
 mkdir -p ~/.config/Code/User
 cat > ~/.config/Code/User/settings.json << "EOF"
 {
   "window.titleBarStyle": "custom",
-  "sync.autoDownload": true,
-  "sync.gist": "ed268eb6a521c3fd1e1d345ba6a2e5ad"
-}
-EOF
-
-cat > ~/.config/Code/User/syncLocalSettings.json << "EOF"
-{
-  "downloadPublicGist": true
 }
 EOF
 POST_INSTALL_EOF
