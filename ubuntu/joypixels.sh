@@ -5,7 +5,7 @@ fi
 
 initialize
 
-version='6.6.0'
+version='7.0.0'
 aria2_download << EOF
 https://cdn.joypixels.com/arch-linux/font/${version}/joypixels-android.ttf
   dir=$FONTS_DIR
