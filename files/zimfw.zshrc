@@ -1,4 +1,7 @@
 #! /bin/zsh
+zmodload zsh/pcre
+setopt REMATCH_PCRE
+
 readonly -i NPROC=32
 
 readonly ZDOTDIR=${HOME}/.zdotdir
