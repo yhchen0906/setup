@@ -88,14 +88,14 @@ download_zmodules() {
 
 patch_zshrc_misc() {
   if (( ${+commands[direnv]} )) ; then
-  cat >> "$ZSHRC" << "EOF"
+    cat >> "$ZSHRC" << "EOF"
 
 eval "$(direnv hook zsh)"
 EOF
   fi
 
   if (( ${+commands[vim]} )) ; then
-  cat >> "$ZSHRC" << "EOF"
+    cat >> "$ZSHRC" << "EOF"
 
 EDITOR='vim'
 export EDITOR
@@ -119,6 +119,12 @@ EOF
   if [[ -d "/opt/ros" ]]; then
     echo "source $(find /opt/ros -mindepth 2 -maxdepth 2 -name setup.zsh)" >> "$ZSHRC"
   fi
+
+  cat >> "$ZSHRC" << "EOF"
+
+# Report CWD using OSC 1337 protocol
+precmd () { echo -n "\x1b]1337;CurrentDir=$(pwd)\x07" }
+EOF
 
   [[ -x "${MAMBA_EXE}" ]] && env "HOME=${ZDOTDIR}" "${MAMBA_EXE}" init zsh && return 0
   [[ -x "${CONDA_EXE}" ]] && env "HOME=${ZDOTDIR}" "${CONDA_EXE}" init zsh && return 0
