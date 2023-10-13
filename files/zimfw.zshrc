@@ -15,6 +15,8 @@ get_conda_prefix() {
     "${HOME}/anaconda3"
     "${HOME}/miniconda3"
     "${HOME}/.local/opt/miniconda3"
+    "${HOME}/miniforge3"
+    "${HOME}/.local/opt/miniforge3"
     "${HOME}/mambaforge"
     "${HOME}/.local/opt/mambaforge"
   )
