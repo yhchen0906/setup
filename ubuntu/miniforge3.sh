@@ -6,16 +6,16 @@ fi
 initialize
 
 aria2_download << EOF
-https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-$(uname)-$(uname -m).sh
+https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh
   dir=$TMP_DIR
-  out=mambaforge.sh
+  out=miniforge3.sh
 EOF
 
 post_install << "POST_INSTALL_EOF"
-chmod a+x "$TMP_DIR/mambaforge.sh"
+chmod a+x "$TMP_DIR/miniforge3.sh"
 
-PREFIX=$OPT_DIR/mambaforge
-"$TMP_DIR/mambaforge.sh" -u -b -p "$PREFIX"
+PREFIX=$OPT_DIR/miniforge3
+"$TMP_DIR/miniforge3.sh" -u -b -p "$PREFIX"
 
 MAMBA=$PREFIX/bin/mamba
 "$MAMBA" update -y mamba
