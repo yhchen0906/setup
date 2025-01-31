@@ -11,6 +11,7 @@ if [[ ${arch} = "aarch64" ]] arch="arm64"
 mkdir -p ${BIN_DIR}
 mkdir -p ${COMPLETION_DIR}
 
+readonly tar='tar --no-same-owner --no-same-permissions'
 readonly base_func='_user_install'
 
 http () {
@@ -39,7 +40,7 @@ github_release_urls () {
 ${base_func}_bat () {
   readonly url=$(github_release_urls 'sharkdp/bat' | grep -F "${ARCH}-unknown-linux-musl.tar.gz")
 
-  http ${url} | tar zxC ${tmp_dir}
+  http ${url} | ${=tar} -zxC ${tmp_dir}
 
   mv ${tmp_dir}/*/${pkg} ${bin_path}
   ${bin_path} --completion zsh >| ${completion_path}
@@ -53,25 +54,25 @@ ${base_func}_eza () {
   readonly urls=($(github_release_urls 'eza-community/eza' | grep -F '.tar.gz'))
 
   readonly bin_url=$(printf "%s\n" ${urls} | grep -F "eza_${ARCH}-unknown-linux-gnu")
-  http ${bin_url} | tar zxC ${BIN_DIR}
+  http ${bin_url} | ${=tar} -zxC ${BIN_DIR}
   chmod a+x ${bin_path}
 
   readonly completion_url=$(printf "%s\n" ${urls} | grep -F "completions-")
-  http ${completion_url} | tar zxC ${tmp_dir}
+  http ${completion_url} | ${=tar} -zxC ${tmp_dir}
 
   mv ${tmp_dir}/*/*/_eza ${completion_path}
 }
 
 ${base_func}_fd () {
   readonly url=$(github_release_urls 'sharkdp/fd' | grep -F -- "${ARCH}-unknown-linux-musl")
-  http ${url} | tar zxC ${tmp_dir}
+  http ${url} | ${=tar} -zxC ${tmp_dir}
   mv ${tmp_dir}/*/${pkg} ${bin_path}
   mv ${tmp_dir}/*/autocomplete/_${pkg} ${completion_path}
 }
 
 ${base_func}_fzf () {
   readonly url=$(github_release_urls 'junegunn/fzf' | grep -F "linux_${arch}.tar.gz")
-  http ${url} | tar zxC ${BIN_DIR}
+  http ${url} | ${=tar} -zxC ${BIN_DIR}
 }
 
 ${base_func}_jq () {
@@ -83,14 +84,14 @@ ${base_func}_jq () {
 
 ${base_func}_rg () {
   readonly url=$(github_release_urls 'BurntSushi/ripgrep' | grep "${ARCH}-unknown-linux-gnu.*\.tar\.gz$")
-  http ${url} | tar zxC ${tmp_dir}
+  http ${url} | ${=tar} -zxC ${tmp_dir}
 
   mv ${tmp_dir}/*/${pkg} ${bin_path}
   ${bin_path} --generate complete-zsh >| ${completion_path}
 }
 
 ${base_func}_stow () {
-  http 'https://ftp.gnu.org/gnu/stow/stow-latest.tar.gz' | tar zxC ${tmp_dir}
+  http 'https://ftp.gnu.org/gnu/stow/stow-latest.tar.gz' | ${=tar} -zxC ${tmp_dir}
   cd ${tmp_dir}/*/ || return
   ./configure --quiet --prefix=${PREFIX}
   make install
