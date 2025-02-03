@@ -83,7 +83,7 @@ ${base_func}_jq () {
 }
 
 ${base_func}_rg () {
-  readonly url=$(github_release_urls 'BurntSushi/ripgrep' | grep "${ARCH}-unknown-linux-gnu.*\.tar\.gz$")
+  readonly url=$(github_release_urls 'BurntSushi/ripgrep' | grep "${ARCH}-unknown-linux-.*\.tar\.gz$")
   http ${url} | ${=tar} -zxC ${tmp_dir}
 
   mv ${tmp_dir}/*/${pkg} ${bin_path}
