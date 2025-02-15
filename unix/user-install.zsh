@@ -51,7 +51,7 @@ ${base_func}_direnv () {
 }
 
 ${base_func}_eza () {
-  readonly urls=($(github_release_urls 'eza-community/eza' | grep -F '.tar.gz'))
+  readonly urls=($(github_release_urls 'eza-community/eza' | grep -F '.tar.gz' | grep -vF 'libgit'))
 
   readonly bin_url=$(printf "%s\n" ${urls} | grep -F "eza_${ARCH}-unknown-linux-gnu")
   http ${bin_url} | ${=tar} -zxC ${BIN_DIR}
